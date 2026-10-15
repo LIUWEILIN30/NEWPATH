@@ -2,7 +2,7 @@
 
 [中文](README.md) | **English**
 
-A parametric toolpath library for large-format pellet 3D printing in Grasshopper. **1.0.4 · 26 components · Rhino 8 / Python 3**
+A parametric toolpath library for large-format pellet 3D printing in Grasshopper. **1.0.5 · 26 components · Rhino 8 / Python 3**
 
 NEWPATH connects geometry slicing, path editing, print sequencing, bead preview, and G-code output on a single Grasshopper canvas. Start with a model or manually drawn layer curves, combine components to suit your design, and inspect and adjust the toolpath as you go.
 
@@ -15,15 +15,15 @@ NEWPATH connects geometry slicing, path editing, print sequencing, bead preview,
 
 ## Download and install
 
-Requirements: **Windows, Rhino 8, Grasshopper, and Rhino Python 3**. Validated with Rhino 8.20 / .NET 8. Mac and Rhino's .NET Framework mode have not been validated.
+Requirements: **Windows, Rhino 8, Grasshopper, and Rhino Python 3**. The minimum host dependency is Rhino 8.20; compatibility with all Rhino 8 versions is not yet available. Version 1.0.5 targets net48 and uses the same GHA in .NET Framework and .NET Core modes. An earlier build was validated in separate Rhino 8.20 processes using Framework 4.8 and .NET 8.0.14. See the latest-build validation limits below. Mac has not been validated.
 
-1. Visit [GitHub Releases](https://github.com/LIUWEILIN30/NEWPATH/releases) and download `NEWPATH_1.0.4.zip`. If the attachment is absent, it has not yet been uploaded.
+1. Visit [GitHub Releases](https://github.com/LIUWEILIN30/NEWPATH/releases) and download `NEWPATH_1.0.5_安装包.zip`. If the attachment is absent, it has not yet been uploaded.
 2. Extract the ZIP, save your work, close all Rhino windows, and run `安装.ps1`. The script verifies the plugin, backs up matching legacy NEWPATH components, and installs `NEWPATH.gha`.
-3. Restart Rhino and Grasshopper, then place components from the six categories in the **NEWPATH** toolbar. Open `示例/双物体逐层打印.gh` in the package to see an example setup.
+3. Restart Rhino and Grasshopper, then place components from the six categories in the **NEWPATH** toolbar. Each category uses two columns.
 
 For manual installation, open **File → Special Folders → Libraries Folder** in Grasshopper and copy in `NEWPATH.gha`. First move out legacy NEWPATH ghuser files and `NEWPATH.Toolbar.gha` to avoid duplicate entries. No separate icons or external Python sources are needed; execution still requires Rhino Python 3.
 
-Existing canvas instances do not upgrade automatically. Place new components and reconnect them. Hover over input ports for Chinese descriptions and default behaviour; connected inputs use incoming data.
+To switch runtime modes, run `SetDotNetRuntime` and restart Rhino; no different GHA is needed. Same-version updates also require closing all Rhino windows, replacing the file, and restarting. Legacy ghuser/Python instances retain their code; existing GHA instances resolve by their original GUIDs. Updated companion inputs require placing new components from the toolbar and reconnecting them. Hover over input ports for Chinese descriptions and default behaviour; connected inputs use incoming data.
 
 ## Workflow
 
@@ -34,7 +34,7 @@ Use Open Continuous Path for open contours, UV Slicer for layer curves along a s
 
 Connect processing nodes through their **Path** data ports. `Preview` displays geometry and cannot replace the packet carrying process attributes. Recompute PATH data upstream rather than using Internalise to store it across sessions. Trigger `Run` again on Continuous Path after saving and reopening.
 
-Before generating G-code, check millimetre units, machine travel limits, temperature, speed, and extrusion settings. Arc output requires controller support for XY-plane G2/G3. Upload uses Moonraker and requires your machine address and any required API key. `Upload` defaults to off; uploading does not start printing. Historical equipment testing is limited to the Jinshi FGF 1800 large-format pellet printer; other machines require adaptation. **Version 1.0.4 has not yet been tested in a physical print.**
+Before generating G-code, check millimetre units, machine travel limits, temperature, speed, and extrusion settings. Arc output requires controller support for XY-plane G2/G3. Upload uses Moonraker and requires your machine address and any required API key. `Upload` defaults to off; uploading does not start printing. Historical equipment testing is limited to the Jinshi FGF 1800 large-format pellet printer; other machines require adaptation. **Version 1.0.5 has not yet been tested in a physical print.**
 
 ## All components
 
@@ -98,14 +98,25 @@ The 26 components follow the six toolbar categories. Icons are displayed at 80×
 
 ## Version changes
 
+**1.0.5 (2026-10-15, updated through 2026-10-16)** fixes loading in .NET Framework mode, retains all 26 component GUIDs and ports, and adds the following updates:
+
+- Placing G-code generation, export, or upload from the toolbar creates and connects 14, 4, or 4 companion input objects respectively, preserving values, ranges, precision, text, and options. Path/GCode data ports still require connections. Saving/reopening or copying existing components does not generate duplicate inputs.
+- Companion inputs for G-code generation align by actual wire endpoints: both ends of each wire share a height, and source output grips share one column. Alignment runs after placement and the first solve; it does not constrain later dragging or rearrange existing canvases.
+- Smart Slicer accepts .NET `IList` at its `Planes` input.
+- Each of the six toolbar categories uses two columns, retaining component identities and ports.
+
 **1.0.4 (2026-10-15)** retains all 26 functions from 1.0.3 as independently registered components in one GHA. It updates continuous paths, open continuous paths, UV slicing, brim generation, G-code generation and upload, and the shared runtime. Compared with the 25 components in 1.0.2, this version includes Layer-by-Layer Printing for sequencing multiple objects by actual layer index.
 
-All 104 inputs have Chinese descriptions; 50 fixed defaults are stored in the ports. Dynamic defaults are calculated as explained in the tooltips. G-code generation and export are placed directly as components, without expanding old ghuser input groups. Defaults follow the current algorithms; custom values from old examples are not migrated automatically.
+All 104 inputs have Chinese descriptions; 50 fixed defaults are stored in the ports. Dynamic defaults are calculated as explained in the tooltips. Defaults follow the current algorithms; custom values from old examples are not migrated automatically.
 
 ## Validation and license
 
-Release validation included 100 offline regressions, structural checks for 21 PATH components, and registration, new-instance, icon, source, port, and default checks for all 26 components. Representative chains covered two-object layer-by-layer printing, continuous paths with brim and infill, and open continuous paths from UV slices. Save/reopen and development-directory isolation checks were also completed.
+Validation of 1.0.4 included 100 offline regressions, structural checks for 21 PATH components, and registration, new-instance, icon, source, port, and default checks for all 26 components. Representative chains covered two-object layer-by-layer printing, continuous paths with brim and infill, and open continuous paths from UV slices. Save/reopen and development-directory isolation checks were also completed.
 
-Network upload, physical printing, and installation after an operating-system restart have not been tested for this release. These checks reflect the release environment and inputs; they do not establish compatibility with every device or canvas combination.
+The earlier 1.0.5 compatibility build passed registration, port, and default checks for all 26 components in separate Rhino 8.20 processes running Framework 4.8 and .NET 8.0.14. Both modes passed Pack Path → G1 conversion → Layer-by-Layer Printing → G-code generation → export analysis, including save/reopen. Additional .NET 8 checks covered brim, infill, continuous paths, and UV open paths. A subsequent companion-input build was checked in .NET 8 for creation, settings, instance identities, and archive readback of all 22 inputs.
+
+Later Smart Slicer and input-alignment fixes passed checks using real GH attributes in a separate .NET Framework process: metadata for all 26 components, alignment of all 14 inputs at three positions, recovery of a displaced first slider, and repeated alignment. The latest toolbar-column update passed separate-process readback checks but has not received live Rhino toolbar visual acceptance. The latest build has not repeated full solving in both runtime modes, save/reopen, or acceptance after installation and a Rhino restart. Earlier live results do not establish equivalent acceptance of the latest binary.
+
+Network upload, physical printing, and installation after an operating-system restart have not been tested for 1.0.5. These checks reflect the environments and inputs of their respective builds; they do not establish compatibility with every device or canvas combination.
 
 This repository provides bilingual documentation and icons. Installation attachments are distributed through [GitHub Releases](https://github.com/LIUWEILIN30/NEWPATH/releases). Licensed under the [MIT License](LICENSE). The GHA embeds the Python algorithms required at runtime and does not provide source confidentiality.
