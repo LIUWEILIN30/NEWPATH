@@ -1,5 +1,4 @@
-# Python sources are not part of this distribution
-*.py
+# Python caches
 *.pyc
 *.pyo
 __pycache__/
