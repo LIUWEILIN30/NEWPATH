@@ -2,38 +2,112 @@
 
 **中文** | [English](README_EN.md)
 
-面向大幅面颗粒3D打印的Grasshopper参数化路径组件库。**1.0.4 · 26个组件 · Rhino 8 / Python 3**。
+面向大幅面颗粒 3D 打印的 Grasshopper 参数化路径组件库。**1.0.4 · 26 个组件 · Rhino 8 / Python 3**
 
-从几何切片、路径编辑和连续化，到料条预览与G-code生成，在Grasshopper中构建可检查、可调整的打印流程。组件名称与说明为中文，端口标识与分类保留英文。
+NEWPATH 将几何切片、路径编辑、打印顺序组织、料条预览与 G-code 输出连接在同一张 Grasshopper 画布中。你可以从模型或手绘层线出发，按设计需要组合组件，逐步检查和调整打印路径。
+
+## 核心价值
+
+- **让路径携带工艺信息**：PATH 数据包统一传递曲线、层号、逐点高度、料条宽度及运动信息，使切片、编辑、预览和输出共享同一套数据。
+- **按构造需求设计路径**：组合双层墙、结构肋、端部承托、brim 和填充，调整局部构造；通过分组、连续路径或逐层打印组织执行顺序。
+- **输出前看清打印过程**：查看路径曲线、逐点运动与料条网格，并用 G-code 运动模拟检查指令对应的打印头运动。
+- **直接在 Grasshopper 使用**：单个 `NEWPATH.gha` 提供 26 个独立组件，算法与图标已内嵌。组件名称和说明为中文，端口标识与分类保留英文。
 
 ## 下载与安装
 
-前往 [GitHub Releases](https://github.com/LIUWEILIN30/NEWPATH/releases)，选择对应版本，下载 `NEWPATH_1.0.4.zip` 安装附件。附件由维护者上传；若尚未显示，请等待该版本发布。
+运行环境：**Windows、Rhino 8、Grasshopper 与 Rhino Python 3**。当前已验证 Rhino 8.20 / .NET 8；Mac 和 Rhino 的 .NET Framework 启动模式尚未验证。
 
-解压后保存工作、关闭全部Rhino窗口，运行 `安装.ps1`。脚本校验插件、备份匹配的旧NEWPATH组件，并将 `NEWPATH.gha` 安装到 `%APPDATA%/Grasshopper/Libraries`。重启Rhino及Grasshopper后，从NEWPATH分类放置组件。
+1. 前往 [GitHub Releases](https://github.com/LIUWEILIN30/NEWPATH/releases)，下载 `NEWPATH_1.0.4.zip` 安装附件；若列表中尚无该附件，表示尚未上传。
+2. 解压，保存工作并关闭全部 Rhino 窗口，运行包内 `安装.ps1`。脚本校验插件，备份匹配的旧 NEWPATH 组件，并安装 `NEWPATH.gha`。
+3. 重启 Rhino 与 Grasshopper，从 **NEWPATH** 工具栏的六个分类中放置组件。可先打开安装包中的 `示例/双物体逐层打印.gh` 查看连接方式。
 
-手动安装：将 `NEWPATH.gha` 放入Grasshopper的 Libraries Folder，先移走旧版NEWPATH的ghuser及 `NEWPATH.Toolbar.gha`，避免重复入口。图标和算法均已内嵌，不依赖外置源码。已有画布实例不会自动升级，需放置新版并重新连接。
+手动安装时，在 Grasshopper 中打开 **File → Special Folders → Libraries Folder**，放入 `NEWPATH.gha`；先移走旧版 NEWPATH 的 ghuser 和 `NEWPATH.Toolbar.gha`，避免重复入口。无需另装图标或外置 Python 源码，算法执行仍依赖 Rhino Python 3。
 
-## 1.0.4 更新
+旧画布中的组件实例不会自动升级，需从新版工具栏放置并重新连接。输入端口可悬停查看中文用途与默认行为；接线后使用外部输入。
 
-保留1.0.3全部26项，改为单个GHA提供独立注册组件。包含连续路径、开放连续路径、UV方向切片、生成brim、G-code生成、上传及公共运行时更新。
+## 使用流程
 
-104个输入端口均有中文用途说明，50个固定默认值写入端口；动态默认值按提示由算法计算。G-code生成与导出直接放置编译组件，不再自动展开ghuser输入组。默认参数遵循算法定义，使用前须按设备核对。
+根据目标选择打印组织方式：
 
-## 使用与环境
+- **连续打印**：智能切片 → 路径分组 → 按需编辑路径 → 连续路径 → 可选 PATH转G1 / PATH转G2 G3 → Path G-code生成 → G-code导出或上传。
+- **多物体逐层打印**：切片 → 按需编辑路径 → 可选 PATH转G1 / PATH转G2 G3 → 逐层打印 → Path G-code生成 → G-code导出或上传。输入模型须使用共同层号基准；同层按 brim、填充、外壁排序。逐层打印接收尚未连续化的路径，其后直接进入 G-code 生成，避免再次分组或连续化改变顺序。
 
-典型流程：智能切片 → 路径分组 → 按需编辑路径 → 连续路径 → 可选PATH转G1或G2/G3 → G-code生成 → 导出或上传。使用Path数据端口连接；Preview用于观察。开放连续路径和UV方向切片按各自输入条件选择。
+开放轮廓使用“开放连续路径”；需要沿曲面参数方向生成层线时使用“UV方向切片”；已有手绘平行层线可用“打包Path”进入流程。各组件有对应的输入条件，详细参数见端口提示。
 
-已在Windows Rhino 8.20、.NET 8、Grasshopper及Rhino Python 3环境验证。未验证Mac或Rhino的.NET Framework启动模式。内嵌算法仍使用Python 3执行，不提供源码保密保证。
+处理节点之间连接 **Path** 数据端口；`Preview` 用于观察几何，不能替代携带工艺属性的数据包。PATH 数据应由上游重算，不应通过 Internalise 跨会话保存；连续路径保存重开后需重新触发 `Run`。
 
-PATH数据应由上游重算，不应Internalise跨会话保存；连续路径保存重开后需重新触发Run。上传默认为False，不会因安装或放置组件启动打印。示例见安装包内“示例”目录。
+生成 G-code 前，核对毫米单位、设备行程、温度、速度和挤出参数；圆弧输出须确认控制器支持 XY 平面 G2/G3。上传组件使用 Moonraker，需要填写自己的设备地址及所需密钥，`Upload` 默认关闭，上传不会启动打印。历史设备测试范围为金石 FGF 1800 大幅面颗粒打印机，其他设备需自行适配；**1.0.4 尚未进行实机打印**。
 
-设备测试范围仅为金石FGF 1800大幅面颗粒打印机，未验证机械臂及桌面级高速打印机。生成指令前核对毫米单位、设备行程、速度、温度、挤出参数及控制器圆弧支持。
+## 全部组件
+
+26 个组件按工具栏中的六个分类排列。图标以 80×80 显示，仓库中提供 512×512 透明 PNG；全部组件通过同一个 GHA 安装。
+
+### 1 Slice · 切片
+
+| 图标 | 组件 | 功能 |
+|---|---|---|
+| <img src="%E5%9B%BE%E6%A0%87/uv_slicer_path.png" width="80" height="80" alt="UV方向切片"> | **UV方向切片** | 沿曲面的指定参数方向生成保形切片，并记录逐点高度和生长方向。 |
+| <img src="%E5%9B%BE%E6%A0%87/smart_slicer_path.png" width="80" height="80" alt="智能切片"> | **智能切片** | 按层高与端部平面切片几何，输出携带料条宽度和逐点属性的路径。 |
+| <img src="%E5%9B%BE%E6%A0%87/pack_path.png" width="80" height="80" alt="打包Path"> | **打包Path** | 把手绘平行层线打包为保留实际层高和来源的 Path 数据。 |
+
+### 2 Path Edit · 路径编辑
+
+| 图标 | 组件 | 功能 |
+|---|---|---|
+| <img src="%E5%9B%BE%E6%A0%87/double_wall_path.png" width="80" height="80" alt="双层墙路径"> | **双层墙路径** | 向闭合墙线内侧偏移，并在指定连接点生成双层墙路径。 |
+| <img src="%E5%9B%BE%E6%A0%87/surface_rib_path.png" width="80" height="80" alt="双道结构肋"> | **双道结构肋** | 按定位点、层范围和悬垂角，在墙体内侧生成双道往返结构肋。 |
+| <img src="%E5%9B%BE%E6%A0%87/brim_skirt_path.png" width="80" height="80" alt="生成brim"> | **生成brim** | 沿落地外轮廓向外生成多圈贴边裙边，并保留原模型路径。 |
+| <img src="%E5%9B%BE%E6%A0%87/skirt_path.png" width="80" height="80" alt="生成包围brim"> | **生成包围brim** | 在全部模型底部生成闭合的包围 brim。 |
+| <img src="%E5%9B%BE%E6%A0%87/end_offset_path.png" width="80" height="80" alt="端部偏移"> | **端部偏移** | 按指定层范围逐层向内或向外偏移墙体端部。 |
+| <img src="%E5%9B%BE%E6%A0%87/end_bearing_path.png" width="80" height="80" alt="端部承托"> | **端部承托** | 在指定端部层范围内逐层加厚双层墙，形成承托面。 |
+| <img src="%E5%9B%BE%E6%A0%87/bottom_hatch_fill.png" width="80" height="80" alt="蛇形填充"> | **蛇形填充** | 按指定层范围和扫描间距，为切片路径添加蛇形底部填充。 |
+| <img src="%E5%9B%BE%E6%A0%87/spiral_infill_path.png" width="80" height="80" alt="螺旋填充"> | **螺旋填充** | 在首个模型组的指定层添加螺旋填充，并保留全部原路径。 |
+
+### 3 Path Assembly · 路径组织
+
+| 图标 | 组件 | 功能 |
+|---|---|---|
+| <img src="%E5%9B%BE%E6%A0%87/open_continuous_path.png" width="80" height="80" alt="开放连续路径"> | **开放连续路径** | 将同组逐层开放曲线交替反向连接为往返打印路径。 |
+| <img src="%E5%9B%BE%E6%A0%87/path_grouping.png" width="80" height="80" alt="路径分组"> | **路径分组** | 按指定高度重新划分打印块，并可按块显示不同颜色。 |
+| <img src="%E5%9B%BE%E6%A0%87/continuous_path.png" width="80" height="80" alt="连续路径"> | **连续路径** | 按引导点调整闭环接缝，将同组切片连接为连续挤出路径。 |
+| <img src="%E5%9B%BE%E6%A0%87/curve_arc_classifier.png" width="80" height="80" alt="PATH转G2 G3"> | **PATH转G2 G3** | 将路径拟合为直线和圆弧，并按公差及段长限制重建路径。 |
+| <img src="%E5%9B%BE%E6%A0%87/path_to_g1.png" width="80" height="80" alt="PATH转G1"> | **PATH转G1** | 按长度或特征采样将 Path 曲线离散为 G1 路径，保留逐点属性。 |
+| <img src="%E5%9B%BE%E6%A0%87/layer_print_order.png" width="80" height="80" alt="逐层打印"> | **逐层打印** | 按真实层号逐层组织打印，同层依次排列brim、填充和外壁。 |
+
+### 4 Export · 输出
+
+| 图标 | 组件 | 功能 |
+|---|---|---|
+| <img src="%E5%9B%BE%E6%A0%87/gcode_upload.png" width="80" height="80" alt="G-code上传"> | **G-code上传** | 将 G-code 保存到本地并上传至指定打印设备。 |
+| <img src="%E5%9B%BE%E6%A0%87/gcode_export.png" width="80" height="80" alt="G-code导出"> | **G-code导出** | 分析打印时间和材料用量，并按按钮将指令保存到指定目录。 |
+| <img src="%E5%9B%BE%E6%A0%87/path_gcode.png" width="80" height="80" alt="Path G-code生成"> | **Path G-code生成** | 根据连续路径及速度、温度和挤出参数生成打印指令。 |
+
+### 5 Analyze · 分析
+
+| 图标 | 组件 | 功能 |
+|---|---|---|
+| <img src="%E5%9B%BE%E6%A0%87/gcode_motion.png" width="80" height="80" alt="Path逐点运动"> | **Path逐点运动** | 读取路径原始点列，输出逐点坐标、索引和入边运动类型。 |
+| <img src="%E5%9B%BE%E6%A0%87/unpack_path.png" width="80" height="80" alt="解包Path"> | **解包Path** | 将路径数据包拆为层平面、曲线、名义层高和原始点列。 |
+| <img src="%E5%9B%BE%E6%A0%87/rounded_mesh_pipe.png" width="80" height="80" alt="路径预览"> | **路径预览** | 按 Path 的逐点宽度和高度预览打印料条网格。 |
+| <img src="%E5%9B%BE%E6%A0%87/Gcode%E8%BF%90%E5%8A%A8%E6%A8%A1%E6%8B%9F_gcode_simulator.png" width="80" height="80" alt="Gcode运动模拟"> | **Gcode运动模拟** | 解析 G-code 并按速度播放打印头运动，显示已走路径。 |
+
+### 6 Utilities · 辅助工具
+
+| 图标 | 组件 | 功能 |
+|---|---|---|
+| <img src="%E5%9B%BE%E6%A0%87/print_bed.png" width="80" height="80" alt="打印床"> | **打印床** | 按设备名称和长宽显示打印床，并输出世界水平基准面。 |
+| <img src="%E5%9B%BE%E6%A0%87/%E6%B0%B4%E5%B9%B3%E5%81%8F%E7%A7%BB%E6%9B%B2%E9%9D%A2_horizontal_offset_surface.png" width="80" height="80" alt="水平偏移曲面"> | **水平偏移曲面** | 按水平距离偏移曲面，可封闭为墙体。 |
+
+## 版本变化
+
+**1.0.4（2026-10-15）** 保留 1.0.3 的全部 26 项功能，改为单个 GHA 中的独立注册组件，并更新连续路径、开放连续路径、UV方向切片、生成brim、G-code生成与上传及公共运行时。相较 1.0.2 的 25 个组件，现版包含“逐层打印”，用于按真实层号组织多物体的打印顺序。
+
+104 个输入端口均提供中文用途说明，50 个固定默认值写入端口；动态默认值按提示由算法计算。G-code 生成与导出直接放置为组件，不再自动展开旧 ghuser 的输入组。默认值以当前算法定义为准，旧示例中的自定义参数不会自动迁移。
 
 ## 验证与许可
 
-1.0.4交付记录：100项离线回归通过，21个PATH组件结构检查零错误；26个组件通过注册、新建实例、图标、源码、端口和默认值检查。中文说明在求解及归档回读后保留，代表链路完成保存重开与开发目录隔离验证。
+1.0.4 交付时完成了 100 项离线回归、21 个 PATH 组件的结构检查，以及全部 26 个组件的注册、新建实例、图标、源码、端口和默认值检查。代表链路覆盖双物体逐层打印、brim 与填充后的连续路径、UV 切片后的开放连续路径，并完成保存重开及开发目录隔离验证。
 
-本版未执行网络上传、机器打印或操作系统重启后的安装验收。上述记录对应交付时的测试条件，不代表其他设备或任意画布均已验证。
+本版尚未执行网络上传、实机打印及操作系统重启后的安装验收。上述验证对应交付时的环境与测试输入，不代表所有设备和画布组合均已验证。
 
-本仓库维护图标和双语说明；安装附件通过GitHub Releases分发。采用 [MIT License](LICENSE)。
+本仓库提供双语说明与图标，安装附件通过 [GitHub Releases](https://github.com/LIUWEILIN30/NEWPATH/releases) 分发。采用 [MIT License](LICENSE)。GHA 内嵌运行所需的 Python 算法，不提供源码保密保证。
