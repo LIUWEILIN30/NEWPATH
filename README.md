@@ -2,7 +2,7 @@
 
 **中文** | [English](README_EN.md)
 
-面向大幅面颗粒 3D 打印的 Grasshopper 参数化路径组件库。**1\.2\.4 · 37 个组件 · Rhino 8 / Python 3**
+面向大幅面颗粒 3D 打印的 Grasshopper 参数化路径组件库。**1.2.7 · 37 个组件 · Rhino 8 / Python 3**
 
 NEWPATH 将几何切片、路径编辑、打印顺序组织、料条预览与 G-code 输出连接在同一张 Grasshopper 画布中。你可以从模型或手绘层线出发，按设计需要组合组件，逐步检查和调整打印路径。
 
@@ -17,11 +17,11 @@ NEWPATH 将几何切片、路径编辑、打印顺序组织、料条预览与 G-
 
 运行环境：**Windows、Rhino 8.20 或更新版本、Grasshopper 与 Rhino Python 3**。本版将全部 37 个组件整合为同一份 net48 GHA，供 Framework 和 Core 模式使用；实际验收范围见下文。Mac 尚未验证。
 
-1. 前往[GitHub Releases](https://github.com/LIUWEILIN30/NEWPATH/releases)下载 `NEWPATH_1\.2\.4\.gha`；附件未出现表示尚未上传。不再提供安装ZIP。
+1. 前往[GitHub Releases](https://github.com/LIUWEILIN30/NEWPATH/releases)下载 `NEWPATH_1.2.7.gha`；附件未出现表示尚未上传。不再提供安装ZIP。
 2. 保存工作并关闭全部Rhino窗口，将旧版NEWPATH GHA及独立的 `NEWPATH.DeviceSettings.gha` / `NEWPATH.Toolbar.gha`移到Libraries以外备份，再复制唯一一份当前GHA到Libraries。
 3. 重启Rhino与Grasshopper，从七个中文分类中放置组件；机器人组设 primary、secondary、tertiary 三栏。
 
-手动安装时，在 Grasshopper 中打开 **File → Special Folders → Libraries Folder**，放入 `NEWPATH_1\.2\.4\.gha`；先移走旧版 NEWPATH 的 ghuser、`NEWPATH.Toolbar.gha` 和独立的 `NEWPATH.DeviceSettings.gha`，避免重复入口。无需另装图标或外置 Python 源码，算法执行仍依赖 Rhino Python 3。
+手动安装时，在 Grasshopper 中打开 **File → Special Folders → Libraries Folder**，放入 `NEWPATH_1.2.7.gha`；先移走旧版 NEWPATH 的 ghuser、`NEWPATH.Toolbar.gha` 和独立的 `NEWPATH.DeviceSettings.gha`，避免重复入口。无需另装图标或外置 Python 源码，算法执行仍依赖 Rhino Python 3。
 
 切换运行时可执行 `SetDotNetRuntime` 后重启 Rhino，无需更换 GHA。同版本更新也需关闭全部 Rhino、替换文件并重启。旧 ghuser/Python 实例保留自身代码，已有 GHA 实例按原 GUID 解析；配套输入更新需从新版工具栏新放置组件并重新连接。输入端口可悬停查看中文用途与默认行为；接线后使用外部输入。
 
@@ -114,11 +114,17 @@ NEWPATH 将几何切片、路径编辑、打印顺序组织、料条预览与 G-
 | <img src="图标/degrees_to_radians.png" width="80" height="80" alt="角度转弧度"> | **角度转弧度** | 将六轴角度转换为可连接机器人目标生成的弧度数据。 |
 | <img src="图标/create_program.png" width="80" height="80" alt="创建程序"> | **创建程序** | 根据机器人系统和目标序列计算运动并生成 KUKA KRL 程序。 |
 | <img src="图标/program_simulation.png" width="80" height="80" alt="程序模拟"> | **程序模拟** | 按程序时间输出机器人网格、TCP 平面与六轴角度。 |
-| — | **模板素材库** | 管理、导入和导出 tem 模板与 GH 画布素材。 |
+| <img src="图标/template_library.png" width="80" height="80" alt="模板素材库"> | **模板素材库** | 管理、导入和导出 tem 模板与 GH 画布素材。 |
 
-加载机器人系统、角度转弧度、创建程序和程序模拟是本库自研组件，随包提供，不依赖 RoBIM 官方组件。Path机器人目标生成及机器人程序导出涉及原生 RoBIM 对象的适配时，需要相应版本的 RoBIM。设备配置、基座数学转换及播放计时本身不引用 RoBIM 程序集。程序导出的 Name 接在导出组件，Create program 可保留内置占位名称。迭代名例如 `TEST001`、`TEST002`，KUKA 模块名称同时检查 24 字符限制。
+加载机器人系统、角度转弧度、创建程序和程序模拟是本库自研组件。Path机器人目标生成的 `RobotMode` 默认为 `NEWPATH`，输出项目目标数据供 NEWPATH 创建程序使用；选择 `RoBIM` 时输出原生目标，连接兼容版本的 RoBIM 原生创建程序。两套机器人组件按整套链路使用；RoBIM 模式需要安装兼容插件，缺插件时会报错并清空输出。
+
+新放置组件的 `PtpSpeed` 配套滑块默认 10%，仍由用户控制；超过 50% 时提示警告。返回点 `EndTarget` 必须高于所有目标。PTP 百分比不代表 TCP 毫米每秒，默认值不等于碰撞安全或真机验收。
+
+程序导出的 Name 接在导出组件，Create program 可保留内置占位名称。迭代名例如 `TEST001`、`TEST002`，KUKA 模块名称同时检查 24 字符限制。
 
 ## 版本变化
+
+**1.2.7（2026-11-04）** 新增 `RobotMode` 双模式与机器人配套输入；新放置的 PTP 速度默认 10%，StartPause 使用滑块。组件总数仍为 37。
 
 **1.1.0（2026-10-20）** 将已验收的路径更新及 6 个机器人组件整合为单个 GHA，共 32 个组件；新增第七分类及两栏，保留原六组分栏。单螺旋填充实验不包含在本版，原有“螺旋填充”仍保留。
 
@@ -136,9 +142,11 @@ NEWPATH 将几何切片、路径编辑、打印顺序组织、料条预览与 G-
 
 **1.0.4（2026-10-15）** 保留 1.0.3 的全部 26 项功能，改为单个 GHA 中的独立注册组件，并更新连续路径、开放连续路径、UV方向切片、生成brim、G-code生成与上传及公共运行时。相较 1.0.2 的 25 个组件，现版包含“逐层打印”，用于按真实层号组织多物体的打印顺序。
 
-当前 131 个输入端口提供用途说明，既有固定默认值随当前接口更新并写入端口；动态默认值按提示由算法计算。默认值以当前算法定义为准，旧示例中的自定义参数不会自动迁移。
+此前记录的 131 个输入端口提供用途说明，既有固定默认值随当前接口更新并写入端口；动态默认值按提示由算法计算。默认值以当前算法定义为准，旧示例中的自定义参数不会自动迁移。
 
 ## 验证与许可
+
+1.2.7 已完成构建及最终 GHA 内嵌代码的 10 组 PTP 代码生成回归；这不等同于 Rhino 实际求解、保存重开、机器人逆解或真机安全验证。本版的 Framework/Core 活体求解、保存重开及机器人实机验收尚未完成，以下旧版本验证不自动适用于 1.2.7。
 
 1.1.0 的同一份最终 GHA 已在 Windows Rhino 8 的独立 Framework 4.8 与 .NET 8.0.14 进程通过 32 项注册、图标、端口、组件归档读写、代表性 PATH 链路、料条预览及保存重开检查；两种模式均验证 40 个配套输入的实际端点对齐，重开后不重复生成输入。机器人功能在 .NET 8 中使用现有数据验证，436 个目标的位姿、关节与工具 TCP 保持一致。未进行本版控制器编译、机器人运动、网络上传或实机打印；第三方 RoBIM 在其他运行模式及版本中的可用性取决于其自身支持范围。
 

@@ -2,7 +2,7 @@
 
 [中文](README.md) | **English**
 
-A parametric toolpath library for large-format pellet 3D printing in Grasshopper. **1\.2\.4 · 37 components · Rhino 8 / Python 3**
+A parametric toolpath library for large-format pellet 3D printing in Grasshopper. **1.2.7 · 37 components · Rhino 8 / Python 3**
 
 NEWPATH connects geometry slicing, path editing, print sequencing, bead preview, and G-code output on a single Grasshopper canvas. Start with a model or manually drawn layer curves, combine components to suit your design, and inspect and adjust the toolpath as you go.
 
@@ -17,11 +17,11 @@ NEWPATH connects geometry slicing, path editing, print sequencing, bead preview,
 
 Requirements: **Windows, Rhino 8.20 or later, Grasshopper, and Rhino Python 3**. All 37 components are provided in one net48 GHA for Framework and Core modes. See the validation scope below. Mac has not been validated.
 
-1. Download `NEWPATH_1\.2\.4\.gha` from [GitHub Releases](https://github.com/LIUWEILIN30/NEWPATH/releases) when available; no installation ZIP is provided.
+1. Download `NEWPATH_1.2.7.gha` from [GitHub Releases](https://github.com/LIUWEILIN30/NEWPATH/releases) when available; no installation ZIP is provided.
 2. Save your work and close every Rhino window. In Grasshopper’s Libraries folder, move out old NEWPATH GHA files and the standalone `NEWPATH.DeviceSettings.gha` / `NEWPATH.Toolbar.gha`, then copy in exactly one current GHA. Keep backups outside Libraries.
 3. Restart Rhino and Grasshopper. NEWPATH has seven Chinese categories; the robotics category has primary, secondary and tertiary toolbar sections.
 
-For manual installation, open **File → Special Folders → Libraries Folder** in Grasshopper and copy in `NEWPATH_1\.2\.4\.gha`. First move out legacy NEWPATH ghuser files and `NEWPATH.Toolbar.gha` and the former `NEWPATH.DeviceSettings.gha` to avoid duplicate entries. No separate icons or external Python sources are needed; execution still requires Rhino Python 3.
+For manual installation, open **File → Special Folders → Libraries Folder** in Grasshopper and copy in `NEWPATH_1.2.7.gha`. First move out legacy NEWPATH ghuser files and `NEWPATH.Toolbar.gha` and the former `NEWPATH.DeviceSettings.gha` to avoid duplicate entries. No separate icons or external Python sources are needed; execution still requires Rhino Python 3.
 
 To switch runtime modes, run `SetDotNetRuntime` and restart Rhino; no different GHA is needed. Same-version updates also require closing all Rhino windows, replacing the file, and restarting. Legacy ghuser/Python instances retain their code; existing GHA instances resolve by their original GUIDs. Updated companion inputs require placing new components from the toolbar and reconnecting them. Hover over input ports for Chinese descriptions and default behaviour; connected inputs use incoming data.
 
@@ -112,11 +112,17 @@ The robotics category uses primary, secondary and tertiary columns.
 | <img src="图标/degrees_to_radians.png" width="80" height="80" alt="Degrees to Radians"> | **角度转弧度** (Degrees to Radians) | Converts six-axis angles to radians for robot target generation. |
 | <img src="图标/create_program.png" width="80" height="80" alt="Create Program"> | **创建程序** (Create Program) | Calculates robot motion from targets and generates KUKA KRL code. |
 | <img src="图标/program_simulation.png" width="80" height="80" alt="Program Simulation"> | **程序模拟** (Program Simulation) | Outputs robot meshes, TCP plane and six-axis angles at a program time. |
-| — | **模板素材库** (Template Library) | Manages, imports and exports tem templates and GH canvas assets. |
+| <img src="图标/template_library.png" width="80" height="80" alt="Template Library"> | **模板素材库** (Template Library) | Manages, imports and exports tem templates and GH canvas assets. |
 
-Load Robot System, Degrees to Radians, Create Program and Program Simulation are developed by NEWPATH, bundled with the library and do not depend on official RoBIM components. Native RoBIM object interoperability in Path机器人目标生成 and 机器人程序导出 requires a compatible RoBIM installation. Configuration, base-transform mathematics and playback timing do not reference RoBIM assemblies. Connect Name to the export component; Create Program may retain its built-in placeholder. Iterations are named `TEST001`, `TEST002`, with KUKA's 24-character module-name limit checked.
+Load Robot System, Degrees to Radians, Create Program and Program Simulation are developed by NEWPATH. The robot target generator's `RobotMode` defaults to `NEWPATH`, producing project target data for NEWPATH Create Program. Select `RoBIM` to produce native targets for a compatible RoBIM Create Program. Use each set of robotics components as a complete chain; RoBIM mode requires a compatible plugin and reports an error and clears its output when the plugin is unavailable.
+
+The companion `PtpSpeed` slider defaults to 10% on newly placed components and remains user-controlled; values above 50% produce a warning. The required `EndTarget` must be higher than all targets. A PTP percentage is not a TCP speed in millimetres per second, and the default does not establish collision safety or physical-machine validation.
+
+Connect Name to the export component; Create Program may retain its built-in placeholder. Iterations are named `TEST001`, `TEST002`, with KUKA's 24-character module-name limit checked.
 
 ## Version changes
+
+**1.2.7 (2026-11-04)** adds `RobotMode` for the NEWPATH and RoBIM chains and updates the companion inputs. Newly placed components default to 10% PTP speed and use a slider for StartPause. The library still contains 37 components.
 
 **1.1.0 (2026-10-20)** combines accepted path updates and six robotics components in one GHA, for 32 components. A seventh category adds two columns while preserving the original six groups. The experimental single-spiral infill component is excluded; the existing Spiral Infill remains included.
 
@@ -134,9 +140,11 @@ Load Robot System, Degrees to Radians, Create Program and Program Simulation are
 
 **1.0.4 (2026-10-15)** retains all 26 functions from 1.0.3 as independently registered components in one GHA. It updates continuous paths, open continuous paths, UV slicing, brim generation, G-code generation and upload, and the shared runtime. Compared with the 25 components in 1.0.2, this version includes Layer-by-Layer Printing for sequencing multiple objects by actual layer index.
 
-The current 131 inputs have descriptions, with fixed defaults updated to the current contracts and stored in the ports. Dynamic defaults are calculated as explained in the tooltips. Defaults follow the current algorithms; custom values from old examples are not migrated automatically.
+The 131 inputs described in earlier records have descriptions, with fixed defaults updated to the current contracts and stored in the ports. Dynamic defaults are calculated as explained in the tooltips. Defaults follow the current algorithms; custom values from old examples are not migrated automatically.
 
 ## Validation and license
+
+Version 1.2.7 has been built and passed ten PTP code-generation regression scenarios using code embedded in the final GHA. This does not establish live Rhino solving, save/reopen, robot inverse kinematics or physical-machine safety. Live Framework/Core solving, save/reopen and physical robot validation have not been completed for this version; the historical results below do not automatically apply to 1.2.7.
 
 The same final 1.1.0 GHA passed registration, icons, ports, component archives, representative PATH chains, bead preview and save/reopen in independent Windows Rhino 8 processes using Framework 4.8 and .NET 8.0.14. Both modes verified actual grip alignment for all 40 companion controls and no duplicate inputs after reopen. Robotics functionality was checked with existing data in .NET 8, retaining the poses, joints and tool TCP of 436 targets. This release has not been validated by controller compilation, robot motion, network upload or physical printing. RoBIM availability in other modes and versions depends on the third-party plugin's own support.
 
