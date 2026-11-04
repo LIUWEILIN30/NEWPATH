@@ -2,7 +2,7 @@
 
 **中文** | [English](README_EN.md)
 
-面向大幅面颗粒 3D 打印的 Grasshopper 参数化路径组件库。**1.1.5 · 32 个组件 · Rhino 8 / Python 3**
+面向大幅面颗粒 3D 打印的 Grasshopper 参数化路径组件库。**1\.2\.4 · 37 个组件 · Rhino 8 / Python 3**
 
 NEWPATH 将几何切片、路径编辑、打印顺序组织、料条预览与 G-code 输出连接在同一张 Grasshopper 画布中。你可以从模型或手绘层线出发，按设计需要组合组件，逐步检查和调整打印路径。
 
@@ -11,17 +11,17 @@ NEWPATH 将几何切片、路径编辑、打印顺序组织、料条预览与 G-
 - **让路径携带工艺信息**：PATH 数据包统一传递曲线、层号、逐点高度、料条宽度及运动信息，使切片、编辑、预览和输出共享同一套数据。
 - **按构造需求设计路径**：组合双层墙、结构肋、端部承托、brim 和填充，调整局部构造；通过分组、连续路径或逐层打印组织执行顺序。
 - **输出前看清打印过程**：查看路径曲线、逐点运动与料条网格，并用 G-code 运动模拟检查指令对应的打印头运动。
-- **直接在 Grasshopper 使用**：单个 `NEWPATH.gha` 提供 32 个独立组件，算法与图标已内嵌。组件名称和说明为中文，端口标识保留英文，分类采用七个中文分组。
+- **直接在 Grasshopper 使用**：单个 `NEWPATH.gha` 提供 37 个独立组件，算法与图标已内嵌。组件名称和说明为中文，端口标识保留英文，分类采用七个中文分组。
 
 ## 下载与安装
 
-运行环境：**Windows、Rhino 8.20 或更新版本、Grasshopper 与 Rhino Python 3**。本版将全部 32 个组件整合为同一份 net48 GHA，供 Framework 和 Core 模式使用；实际验收范围见下文。Mac 尚未验证。
+运行环境：**Windows、Rhino 8.20 或更新版本、Grasshopper 与 Rhino Python 3**。本版将全部 37 个组件整合为同一份 net48 GHA，供 Framework 和 Core 模式使用；实际验收范围见下文。Mac 尚未验证。
 
-1. 前往[GitHub Releases](https://github.com/LIUWEILIN30/NEWPATH/releases)下载 `NEWPATH_1.1.5.gha`；附件未出现表示尚未上传。不再提供安装ZIP。
+1. 前往[GitHub Releases](https://github.com/LIUWEILIN30/NEWPATH/releases)下载 `NEWPATH_1\.2\.4\.gha`；附件未出现表示尚未上传。不再提供安装ZIP。
 2. 保存工作并关闭全部Rhino窗口，将旧版NEWPATH GHA及独立的 `NEWPATH.DeviceSettings.gha` / `NEWPATH.Toolbar.gha`移到Libraries以外备份，再复制唯一一份当前GHA到Libraries。
-3. 重启Rhino与Grasshopper，从七个中文分类中放置组件，每组两栏。
+3. 重启Rhino与Grasshopper，从七个中文分类中放置组件；机器人组设 primary、secondary、tertiary 三栏。
 
-手动安装时，在 Grasshopper 中打开 **File → Special Folders → Libraries Folder**，放入 `NEWPATH_1.1.5.gha`；先移走旧版 NEWPATH 的 ghuser、`NEWPATH.Toolbar.gha` 和独立的 `NEWPATH.DeviceSettings.gha`，避免重复入口。无需另装图标或外置 Python 源码，算法执行仍依赖 Rhino Python 3。
+手动安装时，在 Grasshopper 中打开 **File → Special Folders → Libraries Folder**，放入 `NEWPATH_1\.2\.4\.gha`；先移走旧版 NEWPATH 的 ghuser、`NEWPATH.Toolbar.gha` 和独立的 `NEWPATH.DeviceSettings.gha`，避免重复入口。无需另装图标或外置 Python 源码，算法执行仍依赖 Rhino Python 3。
 
 切换运行时可执行 `SetDotNetRuntime` 后重启 Rhino，无需更换 GHA。同版本更新也需关闭全部 Rhino、替换文件并重启。旧 ghuser/Python 实例保留自身代码，已有 GHA 实例按原 GUID 解析；配套输入更新需从新版工具栏新放置组件并重新连接。输入端口可悬停查看中文用途与默认行为；接线后使用外部输入。
 
@@ -40,7 +40,7 @@ NEWPATH 将几何切片、路径编辑、打印顺序组织、料条预览与 G-
 
 ## 全部组件
 
-32 个组件按工具栏中的七个分类排列。图标以 80×80 显示，仓库中提供 512×512 透明 PNG；全部组件通过同一个 GHA 安装。
+37 个组件按工具栏中的七个分类排列。图标以 80×80 显示；仓库中提供组件图标的 512×512 透明 PNG，模板素材库图标为嵌入位图（1\.2\.3 起）。全部组件通过同一个 GHA 安装。
 
 ### 1 切片 · 切片
 
@@ -100,18 +100,23 @@ NEWPATH 将几何切片、路径编辑、打印顺序组织、料条预览与 G-
 
 ### 7 机器人 · 机器人
 
-第一栏为基座与设备配置，第二栏为目标生成、播放与导出。
+机器人组按 primary、secondary、tertiary 分为三栏。
 
 | 图标 | 组件 | 功能 |
 |---|---|---|
 | <img src="图标/base_inverse.png" width="80" height="80" alt="基座坐标逆变换"> | **基座坐标逆变换** | 单线 RS 输入与输出，对示教器基座位姿取逆，其余系统数据透传。 |
 | <img src="图标/tool_setup.png" width="80" height="80" alt="Tool与Base设置"> | **Tool与Base设置** | 将工具 TCP、模型、负载、打印姿态及 TOOL/BASE 编号保存为独立配置包。 |
-| <img src="图标/joint_pose.png" width="80" height="80" alt="Joint Pose"> | **Joint Pose** | 编辑、切换并保存设备六轴姿态预设。 |
+| <img src="图标/joint_pose.png" width="80" height="80" alt="Joint Pose"> | **设备六轴姿态** | 编辑、切换并保存设备六轴姿态预设。 |
 | <img src="图标/path_robim_targets.png" width="80" height="80" alt="机器人目标生成"> | **Path机器人目标生成** | 从 Path 和工具基座配置包生成起始、打印、返回目标序列。 |
 | <img src="图标/robim_playback.png" width="80" height="80" alt="播放控制"> | **RoBIM播放控制** | 按程序时长提供暂停、定位、倍速及归零的模拟时间控制。 |
 | <img src="图标/robot_program_export.png" width="80" height="80" alt="程序导出"> | **机器人程序导出** | 校验名称，追加纯数字迭代后缀，统一程序声明、调用和文件名后导出。 |
+| <img src="图标/load_robot_system.png" width="80" height="80" alt="加载机器人系统"> | **加载机器人系统** | 加载指定型号的机器人系统，供目标生成、程序计算与仿真使用。 |
+| <img src="图标/degrees_to_radians.png" width="80" height="80" alt="角度转弧度"> | **角度转弧度** | 将六轴角度转换为可连接机器人目标生成的弧度数据。 |
+| <img src="图标/create_program.png" width="80" height="80" alt="创建程序"> | **创建程序** | 根据机器人系统和目标序列计算运动并生成 KUKA KRL 程序。 |
+| <img src="图标/program_simulation.png" width="80" height="80" alt="程序模拟"> | **程序模拟** | 按程序时间输出机器人网格、TCP 平面与六轴角度。 |
+| — | **模板素材库** | 管理、导入和导出 tem 模板与 GH 画布素材。 |
 
-机器人目标生成及程序导出需要相应版本的 RoBIM；Load robot system、Create program 和 Program simulation 使用 RoBIM 官方组件，不包含在本库中。设备配置、基座数学转换及播放计时本身不引用 RoBIM 程序集。程序导出的 Name 接在导出组件，Create program 可保留内置占位名称。迭代名例如 `TEST001`、`TEST002`，KUKA 模块名称同时检查 24 字符限制。
+加载机器人系统、角度转弧度、创建程序和程序模拟是本库自研组件，随包提供，不依赖 RoBIM 官方组件。Path机器人目标生成及机器人程序导出涉及原生 RoBIM 对象的适配时，需要相应版本的 RoBIM。设备配置、基座数学转换及播放计时本身不引用 RoBIM 程序集。程序导出的 Name 接在导出组件，Create program 可保留内置占位名称。迭代名例如 `TEST001`、`TEST002`，KUKA 模块名称同时检查 24 字符限制。
 
 ## 版本变化
 

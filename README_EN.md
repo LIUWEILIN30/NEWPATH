@@ -2,7 +2,7 @@
 
 [中文](README.md) | **English**
 
-A parametric toolpath library for large-format pellet 3D printing in Grasshopper. **1.1.5 · 32 components · Rhino 8 / Python 3**
+A parametric toolpath library for large-format pellet 3D printing in Grasshopper. **1\.2\.4 · 37 components · Rhino 8 / Python 3**
 
 NEWPATH connects geometry slicing, path editing, print sequencing, bead preview, and G-code output on a single Grasshopper canvas. Start with a model or manually drawn layer curves, combine components to suit your design, and inspect and adjust the toolpath as you go.
 
@@ -11,17 +11,17 @@ NEWPATH connects geometry slicing, path editing, print sequencing, bead preview,
 - **Keep process data with the path**: PATH packets carry curves, layer indices, per-point heights, bead widths, and motion information, so slicing, editing, preview, and output share the same data.
 - **Design paths around construction needs**: Combine double walls, ribs, end supports, brims, and infill to adjust local details. Organise execution through grouping, continuous paths, or layer-by-layer printing.
 - **Inspect the process before export**: Examine curves, pointwise motion, and bead meshes, then simulate the print-head motion described by the G-code.
-- **Use it directly in Grasshopper**: One `NEWPATH.gha` provides 32 independent components with embedded algorithms and icons. Component names and descriptions are Chinese; port identifiers remain English and categories use seven Chinese labels. English component names below are translations for reference.
+- **Use it directly in Grasshopper**: One `NEWPATH.gha` provides 37 independent components with embedded algorithms and icons. Component names and descriptions are Chinese; port identifiers remain English and categories use seven Chinese labels. Names below follow the manifest; English translations are provided for reference.
 
 ## Download and install
 
-Requirements: **Windows, Rhino 8.20 or later, Grasshopper, and Rhino Python 3**. All 32 components are provided in one net48 GHA for Framework and Core modes. See the validation scope below. Mac has not been validated.
+Requirements: **Windows, Rhino 8.20 or later, Grasshopper, and Rhino Python 3**. All 37 components are provided in one net48 GHA for Framework and Core modes. See the validation scope below. Mac has not been validated.
 
-1. Download `NEWPATH_1.1.5.gha` from [GitHub Releases](https://github.com/LIUWEILIN30/NEWPATH/releases) when available; no installation ZIP is provided.
+1. Download `NEWPATH_1\.2\.4\.gha` from [GitHub Releases](https://github.com/LIUWEILIN30/NEWPATH/releases) when available; no installation ZIP is provided.
 2. Save your work and close every Rhino window. In Grasshopper’s Libraries folder, move out old NEWPATH GHA files and the standalone `NEWPATH.DeviceSettings.gha` / `NEWPATH.Toolbar.gha`, then copy in exactly one current GHA. Keep backups outside Libraries.
-3. Restart Rhino and Grasshopper. NEWPATH has seven Chinese categories, each with two toolbar sections.
+3. Restart Rhino and Grasshopper. NEWPATH has seven Chinese categories; the robotics category has primary, secondary and tertiary toolbar sections.
 
-For manual installation, open **File → Special Folders → Libraries Folder** in Grasshopper and copy in `NEWPATH_1.1.5.gha`. First move out legacy NEWPATH ghuser files and `NEWPATH.Toolbar.gha` and the former `NEWPATH.DeviceSettings.gha` to avoid duplicate entries. No separate icons or external Python sources are needed; execution still requires Rhino Python 3.
+For manual installation, open **File → Special Folders → Libraries Folder** in Grasshopper and copy in `NEWPATH_1\.2\.4\.gha`. First move out legacy NEWPATH ghuser files and `NEWPATH.Toolbar.gha` and the former `NEWPATH.DeviceSettings.gha` to avoid duplicate entries. No separate icons or external Python sources are needed; execution still requires Rhino Python 3.
 
 To switch runtime modes, run `SetDotNetRuntime` and restart Rhino; no different GHA is needed. Same-version updates also require closing all Rhino windows, replacing the file, and restarting. Legacy ghuser/Python instances retain their code; existing GHA instances resolve by their original GUIDs. Updated companion inputs require placing new components from the toolbar and reconnecting them. Hover over input ports for Chinese descriptions and default behaviour; connected inputs use incoming data.
 
@@ -38,78 +38,83 @@ Before generating G-code, check millimetre units, machine travel limits, tempera
 
 ## All components
 
-The 32 components follow the seven toolbar categories. Icons are displayed at 80×80; 512×512 transparent PNGs are available in the repository. All components are installed through the same GHA.
+The 37 components follow the seven toolbar categories. Icons are displayed at 80×80; the repository provides 512×512 transparent PNGs for component icons, and the template library icon is embedded since 1.2.3. All components are installed through the same GHA.
 
 ### 1 切片
 
 | Icon | Component | Function |
 |---|---|---|
-| <img src="图标/uv_slicer_path.png" width="80" height="80" alt="UV Slicer"> | **UV Slicer** | Creates conformal slices along a selected surface parameter direction, recording per-point heights and growth directions. |
-| <img src="图标/smart_slicer_path.png" width="80" height="80" alt="Smart Slicer"> | **Smart Slicer** | Slices geometry using layer heights and end planes, producing paths with bead widths and per-point attributes. |
-| <img src="图标/pack_path.png" width="80" height="80" alt="Pack Path"> | **Pack Path** | Packages manually drawn parallel layer curves as Path data, preserving actual layer heights and provenance. |
+| <img src="图标/uv_slicer_path.png" width="80" height="80" alt="UV Slicer"> | **UV方向切片** (UV Slicer) | Creates conformal slices along a selected surface parameter direction, recording per-point heights and growth directions. |
+| <img src="图标/smart_slicer_path.png" width="80" height="80" alt="Smart Slicer"> | **智能切片** (Smart Slicer) | Slices geometry using layer heights and end planes, producing paths with bead widths and per-point attributes. |
+| <img src="图标/pack_path.png" width="80" height="80" alt="Pack Path"> | **打包Path** (Pack Path) | Packages manually drawn parallel layer curves as Path data, preserving actual layer heights and provenance. |
 
 ### 2 Path编辑
 
 | Icon | Component | Function |
 |---|---|---|
-| <img src="图标/double_wall_path.png" width="80" height="80" alt="Double Wall Path"> | **Double Wall Path** | Offsets closed wall curves inward and creates double-wall paths at specified connection points. |
-| <img src="图标/surface_rib_path.png" width="80" height="80" alt="Double-Track Rib"> | **Double-Track Rib** | Creates paired out-and-back ribs inside walls using location points, layer ranges, and an overhang angle. |
-| <img src="图标/brim_skirt_path.png" width="80" height="80" alt="Generate Brim"> | **Generate Brim** | Adds outward brim loops around contours touching the build plane while retaining original model paths. |
-| <img src="图标/skirt_path.png" width="80" height="80" alt="Generate Surrounding Brim"> | **Generate Surrounding Brim** | Creates a closed brim surrounding all models at their base. |
-| <img src="图标/end_offset_path.png" width="80" height="80" alt="End Offset"> | **End Offset** | Offsets wall ends inward or outward, layer by layer, within a specified layer range. |
-| <img src="图标/end_bearing_path.png" width="80" height="80" alt="End Support"> | **End Support** | Thickens double walls across specified end-layer ranges to form support surfaces. |
-| <img src="图标/bottom_hatch_fill.png" width="80" height="80" alt="Zigzag Infill"> | **Zigzag Infill** | Adds zigzag bottom infill using a specified layer range and scan spacing. |
-| <img src="图标/spiral_infill_path.png" width="80" height="80" alt="Spiral Infill"> | **Spiral Infill** | Adds spiral infill to selected layers of the first model group while retaining all original paths. |
+| <img src="图标/double_wall_path.png" width="80" height="80" alt="Double Wall Path"> | **双层墙路径** (Double Wall Path) | Offsets closed wall curves inward and creates double-wall paths at specified connection points. |
+| <img src="图标/surface_rib_path.png" width="80" height="80" alt="Double-Track Rib"> | **双道结构肋** (Double-Track Rib) | Creates paired out-and-back ribs inside walls using location points, layer ranges, and an overhang angle. |
+| <img src="图标/brim_skirt_path.png" width="80" height="80" alt="Generate Brim"> | **生成brim** (Generate Brim) | Adds outward brim loops around contours touching the build plane while retaining original model paths. |
+| <img src="图标/skirt_path.png" width="80" height="80" alt="Generate Surrounding Brim"> | **生成包围brim** (Generate Surrounding Brim) | Creates a closed brim surrounding all models at their base. |
+| <img src="图标/end_offset_path.png" width="80" height="80" alt="End Offset"> | **端部偏移** (End Offset) | Offsets wall ends inward or outward, layer by layer, within a specified layer range. |
+| <img src="图标/end_bearing_path.png" width="80" height="80" alt="End Support"> | **端部承托** (End Support) | Thickens double walls across specified end-layer ranges to form support surfaces. |
+| <img src="图标/bottom_hatch_fill.png" width="80" height="80" alt="Zigzag Infill"> | **蛇形填充** (Zigzag Infill) | Adds zigzag bottom infill using a specified layer range and scan spacing. |
+| <img src="图标/spiral_infill_path.png" width="80" height="80" alt="Spiral Infill"> | **螺旋填充** (Spiral Infill) | Adds spiral infill to selected layers of the first model group while retaining all original paths. |
 
 ### 3 Path组织
 
 | Icon | Component | Function |
 |---|---|---|
-| <img src="图标/open_continuous_path.png" width="80" height="80" alt="Open Continuous Path"> | **Open Continuous Path** | Alternates successive open layer curves in a group and joins them into a back-and-forth printing path. |
-| <img src="图标/path_grouping.png" width="80" height="80" alt="Path Grouping"> | **Path Grouping** | Repartitions paths into print blocks at specified heights, with optional colours for each block. |
-| <img src="图标/continuous_path.png" width="80" height="80" alt="Continuous Path"> | **Continuous Path** | Adjusts closed-loop seams using guide points and joins slices in a group into a continuous extrusion path. |
-| <img src="图标/curve_arc_classifier.png" width="80" height="80" alt="PATH to G2 G3"> | **PATH to G2 G3** | Fits lines and arcs to paths and rebuilds them within tolerance and segment-length limits. |
-| <img src="图标/path_to_g1.png" width="80" height="80" alt="PATH to G1"> | **PATH to G1** | Samples Path curves by length or geometric features to create G1 paths while preserving per-point attributes. |
-| <img src="图标/layer_print_order.png" width="80" height="80" alt="Layer-by-Layer Printing"> | **Layer-by-Layer Printing** | Organises printing by actual layer index, ordering brim, infill, and outer walls within each layer. |
+| <img src="图标/open_continuous_path.png" width="80" height="80" alt="Open Continuous Path"> | **开放连续路径** (Open Continuous Path) | Alternates successive open layer curves in a group and joins them into a back-and-forth printing path. |
+| <img src="图标/path_grouping.png" width="80" height="80" alt="Path Grouping"> | **路径分组** (Path Grouping) | Repartitions paths into print blocks at specified heights, with optional colours for each block. |
+| <img src="图标/continuous_path.png" width="80" height="80" alt="Continuous Path"> | **连续路径** (Continuous Path) | Adjusts closed-loop seams using guide points and joins slices in a group into a continuous extrusion path. |
+| <img src="图标/curve_arc_classifier.png" width="80" height="80" alt="PATH to G2 G3"> | **PATH转G2 G3** (PATH to G2 G3) | Fits lines and arcs to paths and rebuilds them within tolerance and segment-length limits. |
+| <img src="图标/path_to_g1.png" width="80" height="80" alt="PATH to G1"> | **PATH转G1** (PATH to G1) | Samples Path curves by length or geometric features to create G1 paths while preserving per-point attributes. |
+| <img src="图标/layer_print_order.png" width="80" height="80" alt="Layer-by-Layer Printing"> | **逐层打印** (Layer-by-Layer Printing) | Organises printing by actual layer index, ordering brim, infill, and outer walls within each layer. |
 
 ### 4 导出
 
 | Icon | Component | Function |
 |---|---|---|
-| <img src="图标/gcode_upload.png" width="80" height="80" alt="G-code Upload"> | **G-code Upload** | Saves G-code locally and uploads it to the specified printing device. |
-| <img src="图标/gcode_export.png" width="80" height="80" alt="G-code Export"> | **G-code Export** | Estimates printing time and material usage, and saves instructions to a selected directory when triggered. |
-| <img src="图标/path_gcode.png" width="80" height="80" alt="Path G-code"> | **Path G-code** | Generates printing instructions from continuous paths and speed, temperature, and extrusion settings. |
+| <img src="图标/gcode_upload.png" width="80" height="80" alt="G-code Upload"> | **G-code上传** (G-code Upload) | Saves G-code locally and uploads it to the specified printing device. |
+| <img src="图标/gcode_export.png" width="80" height="80" alt="G-code Export"> | **G-code导出** (G-code Export) | Estimates printing time and material usage, and saves instructions to a selected directory when triggered. |
+| <img src="图标/path_gcode.png" width="80" height="80" alt="Path G-code"> | **Path G-code生成** (Path G-code) | Generates printing instructions from continuous paths and speed, temperature, and extrusion settings. |
 
 ### 5 分析
 
 | Icon | Component | Function |
 |---|---|---|
-| <img src="图标/gcode_motion.png" width="80" height="80" alt="Pointwise Path Motion"> | **Pointwise Path Motion** | Reads original path points and outputs coordinates, indices, and incoming motion types. |
-| <img src="图标/unpack_path.png" width="80" height="80" alt="Unpack Path"> | **Unpack Path** | Splits a path packet into layer planes, curves, nominal layer heights, and original point lists. |
-| <img src="图标/rounded_mesh_pipe.png" width="80" height="80" alt="Path Preview"> | **Path Preview** | Previews printed bead meshes using per-point widths and heights from Path data. |
-| <img src="图标/Gcode运动模拟_gcode_simulator.png" width="80" height="80" alt="G-code Motion Simulator"> | **G-code Motion Simulator** | Parses G-code and plays print-head motion at the specified speeds, showing the travelled path. |
+| <img src="图标/gcode_motion.png" width="80" height="80" alt="Pointwise Path Motion"> | **Path逐点运动** (Pointwise Path Motion) | Reads original path points and outputs coordinates, indices, and incoming motion types. |
+| <img src="图标/unpack_path.png" width="80" height="80" alt="Unpack Path"> | **解包Path** (Unpack Path) | Splits a path packet into layer planes, curves, nominal layer heights, and original point lists. |
+| <img src="图标/rounded_mesh_pipe.png" width="80" height="80" alt="Path Preview"> | **路径预览** (Path Preview) | Previews printed bead meshes using per-point widths and heights from Path data. |
+| <img src="图标/Gcode运动模拟_gcode_simulator.png" width="80" height="80" alt="G-code Motion Simulator"> | **Gcode运动模拟** (G-code Motion Simulator) | Parses G-code and plays print-head motion at the specified speeds, showing the travelled path. |
 
 ### 6 工具
 
 | Icon | Component | Function |
 |---|---|---|
-| <img src="图标/print_bed.png" width="80" height="80" alt="Print Bed"> | **Print Bed** | Displays a print bed from its device name and dimensions, and outputs a world-horizontal reference plane. |
-| <img src="图标/水平偏移曲面_horizontal_offset_surface.png" width="80" height="80" alt="Horizontal Surface Offset"> | **Horizontal Surface Offset** | Offsets surfaces by a horizontal distance, with an option to close them into walls. |
+| <img src="图标/print_bed.png" width="80" height="80" alt="Print Bed"> | **打印床** (Print Bed) | Displays a print bed from its device name and dimensions, and outputs a world-horizontal reference plane. |
+| <img src="图标/水平偏移曲面_horizontal_offset_surface.png" width="80" height="80" alt="Horizontal Surface Offset"> | **水平偏移曲面** (Horizontal Surface Offset) | Offsets surfaces by a horizontal distance, with an option to close them into walls. |
 
 ### 7 机器人 · Robotics
 
-The first column contains base and device configuration; the second contains target generation, playback and export.
+The robotics category uses primary, secondary and tertiary columns.
 
 | Icon | Component | Function |
 |---|---|---|
-| <img src="图标/base_inverse.png" width="80" height="80" alt="Base Inverse"> | **Base Inverse** | Inverts the taught base pose through one RS input and output while passing through other system data. |
+| <img src="图标/base_inverse.png" width="80" height="80" alt="Base Inverse"> | **基座坐标逆变换** (Base Inverse) | Inverts the taught base pose through one RS input and output while passing through other system data. |
 | <img src="图标/tool_setup.png" width="80" height="80" alt="Tool与Base设置"> | **Tool与Base设置** | Stores TCP, tool mesh, payload, print pose and TOOL/BASE numbers in one independent packet. |
-| <img src="图标/joint_pose.png" width="80" height="80" alt="Joint Pose"> | **Joint Pose** | Edits, switches and saves six-axis joint presets. |
-| <img src="图标/path_robim_targets.png" width="80" height="80" alt="Robot Targets"> | **Robot Target Generation** | Converts Path data and the tool/base packet into start, printing and return targets. |
-| <img src="图标/robim_playback.png" width="80" height="80" alt="Playback"> | **Playback Control** | Provides pause, seek, speed and reset controls for simulation time. |
-| <img src="图标/robot_program_export.png" width="80" height="80" alt="Program Export"> | **Robot Program Export** | Validates names, appends numeric iterations, and exports consistent declarations, calls and filenames. |
+| <img src="图标/joint_pose.png" width="80" height="80" alt="Joint Pose"> | **设备六轴姿态** (Joint Pose) | Edits, switches and saves six-axis joint presets. |
+| <img src="图标/path_robim_targets.png" width="80" height="80" alt="Robot Targets"> | **Path机器人目标生成** (Robot Target Generation) | Converts Path data and the tool/base packet into start, printing and return targets. |
+| <img src="图标/robim_playback.png" width="80" height="80" alt="Playback"> | **RoBIM播放控制** (Playback Control) | Provides pause, seek, speed and reset controls for simulation time. |
+| <img src="图标/robot_program_export.png" width="80" height="80" alt="Program Export"> | **机器人程序导出** (Robot Program Export) | Validates names, appends numeric iterations, and exports consistent declarations, calls and filenames. |
+| <img src="图标/load_robot_system.png" width="80" height="80" alt="Load Robot System"> | **加载机器人系统** (Load Robot System) | Loads a supported robot system for target generation, program calculation and simulation. |
+| <img src="图标/degrees_to_radians.png" width="80" height="80" alt="Degrees to Radians"> | **角度转弧度** (Degrees to Radians) | Converts six-axis angles to radians for robot target generation. |
+| <img src="图标/create_program.png" width="80" height="80" alt="Create Program"> | **创建程序** (Create Program) | Calculates robot motion from targets and generates KUKA KRL code. |
+| <img src="图标/program_simulation.png" width="80" height="80" alt="Program Simulation"> | **程序模拟** (Program Simulation) | Outputs robot meshes, TCP plane and six-axis angles at a program time. |
+| — | **模板素材库** (Template Library) | Manages, imports and exports tem templates and GH canvas assets. |
 
-Robot target generation and program export require a compatible RoBIM installation. Load Robot System, Create Program and Program Simulation remain official RoBIM components and are not bundled. Configuration, base-transform mathematics and playback timing do not reference RoBIM assemblies. Connect Name to the export component; Create Program may retain its built-in placeholder. Iterations are named `TEST001`, `TEST002`, with KUKA's 24-character module-name limit checked.
+Load Robot System, Degrees to Radians, Create Program and Program Simulation are developed by NEWPATH, bundled with the library and do not depend on official RoBIM components. Native RoBIM object interoperability in Path机器人目标生成 and 机器人程序导出 requires a compatible RoBIM installation. Configuration, base-transform mathematics and playback timing do not reference RoBIM assemblies. Connect Name to the export component; Create Program may retain its built-in placeholder. Iterations are named `TEST001`, `TEST002`, with KUKA's 24-character module-name limit checked.
 
 ## Version changes
 
