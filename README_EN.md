@@ -144,28 +144,4 @@ The 131 inputs described in earlier records have descriptions, with fixed defaul
 
 ## Validation and license
 
-Version 1.2.7 has been built and passed ten PTP code-generation regression scenarios using code embedded in the final GHA. This does not establish live Rhino solving, save/reopen, robot inverse kinematics or physical-machine safety. Live Framework/Core solving, save/reopen and physical robot validation have not been completed for this version; the historical results below do not automatically apply to 1.2.7.
-
-The same final 1.1.0 GHA passed registration, icons, ports, component archives, representative PATH chains, bead preview and save/reopen in independent Windows Rhino 8 processes using Framework 4.8 and .NET 8.0.14. Both modes verified actual grip alignment for all 40 companion controls and no duplicate inputs after reopen. Robotics functionality was checked with existing data in .NET 8, retaining the poses, joints and tool TCP of 436 targets. This release has not been validated by controller compilation, robot motion, network upload or physical printing. RoBIM availability in other modes and versions depends on the third-party plugin's own support.
-
-Validation of 1.0.4 included 100 offline regressions, structural checks for 21 PATH components, and registration, new-instance, icon, source, port, and default checks for all 26 components. Representative chains covered two-object layer-by-layer printing, continuous paths with brim and infill, and open continuous paths from UV slices. Save/reopen and development-directory isolation checks were also completed.
-
-The earlier 1.0.5 compatibility build passed registration, port, and default checks for all 26 components in separate Rhino 8.20 processes running Framework 4.8 and .NET 8.0.14. Both modes passed Pack Path → G1 conversion → Layer-by-Layer Printing → G-code generation → export analysis, including save/reopen. Additional .NET 8 checks covered brim, infill, continuous paths, and UV open paths. A subsequent companion-input build was checked in .NET 8 for creation, settings, instance identities, and archive readback of all 22 inputs.
-
-Later Smart Slicer and input-alignment fixes passed checks using real GH attributes in a separate .NET Framework process: metadata for all 26 components, alignment of all 14 inputs at three positions, recovery of a displaced first slider, and repeated alignment. That 1.0.5 toolbar-column update passed separate-process readback checks but has not received live Rhino toolbar visual acceptance. That 1.0.5 build has not repeated full solving in both runtime modes, save/reopen, or acceptance after installation and a Rhino restart. Earlier live results do not establish equivalent acceptance of the latest binary.
-
-Network upload, physical printing, and installation after an operating-system restart have not been tested for 1.0.5. These checks reflect the environments and inputs of their respective builds; they do not establish compatibility with every device or canvas combination.
-
 This repository provides bilingual documentation and icons. Installation attachments are distributed through [GitHub Releases](https://github.com/LIUWEILIN30/NEWPATH/releases). Licensed under the [MIT License](LICENSE). The GHA embeds the Python algorithms required at runtime and does not provide source confidentiality.
-
-The 1.1.0 category/name correction uses seven Chinese category labels, renames Tool/Base setup, and hides the legacy TCP entry. All exported objects in the corrected assembly were inspected: seven registered groups, 32 visible components and 75 resources. The live runtime results above refer to the preceding functional build; this metadata correction has not repeated live Rhino solves.
-
-**1.1.1 (2026-10-20)** changes the target generator input display name to `toolbasesetup`, synchronizing its script variable while retaining the legacy `Tool` source alias. Components keep Chinese display names and descriptions; port labels remain English. Delivery is a single versioned GHA; private loadable sources stay local. Current checks and remaining live-runtime coverage are recorded separately from historical validation.
-
-**1.1.2 (2026-10-20)** normalizes the input name to `ToolBaseSetup`, following PascalCase port naming.
-
-**1.1.3 (2026-10-21)** restores functional descriptions and Chinese display names, status text and owned diagnostics. Native surface fields use `ToolBaseSetup` and `JointPose`; the target input formally uses `ToolBaseSetup` while preserving legacy aliases. Compilation, structure/copy checks and offline base, playback and export regressions passed. Live dual-runtime Rhino and save/reopen checks have not been repeated for this binary.
-
-**1.1.4 (2026-10-21)** follows the current development-canvas source contracts and restores the missing `Flip` (surface ribs), `Angle` (end offset), and `GuidePoint` (spiral infill) inputs. The library retains 32 components and seven groups, with descriptions derived from the authoritative sources. Checks covered structure and resources, all 32 component metadata/archive roundtrips in Rhino .NET 8, alignment of 40 companion inputs, and spiral-infill output using existing canvas data. Framework live solves, save/reopen and development-directory isolation have not been repeated for this binary.
-
-**1.1.5 (2026-10-21)** promotes the accepted G1/G2 performance implementations while preserving component GUIDs and ports. G1 embeds its local conversion backend and does not read development/test files at runtime. Algorithm parity, structure and resources were checked; live Rhino dual-runtime solves and save/reopen have not been repeated for this binary.
